@@ -35,6 +35,12 @@ describe( 'rememberMe', function( ) {
       sinon.assert.calledWith( JSON.stringify, { url: 'foo', foo: 'bar' } );
     } );
 
+    it( 'will let us overwrite the defaults', function( ) {
+      rememberMe.set( { url: 'bar' } );
+      sinon.assert.calledOnce( JSON.stringify );
+      sinon.assert.calledWith( JSON.stringify, { url: 'bar' } );
+    } );
+
     it( 'is ok with falsy data', function( ) {
       rememberMe.set( null );
       sinon.assert.calledOnce( JSON.stringify );

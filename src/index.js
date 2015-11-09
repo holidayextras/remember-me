@@ -10,7 +10,7 @@ rememberMe.set = function( params ) {
   var defaults = {
     url: location.href
   };
-  var data = _.extend( { }, params, defaults );
+  var data = _.extend( defaults, params );
   try {
     localStorage[rememberMe.key] = JSON.stringify( data );
   } catch( e ) {
