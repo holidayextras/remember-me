@@ -1,0 +1,37 @@
+{
+  "name": "remember-me",
+  "version": "1.0.0",
+  "description": "A simple abstraction of \"remember my previous trip\"",
+  "main": "src/index.js",
+  "scripts": {
+    "ci": "npm run lint && npm run coverage",
+    "coverage": "istanbul cover -x src/view/*.js _mocha --",
+    "lint": "make-up src && echo '🍻  All good!'",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/holidayextras/remember-me.git"
+  },
+  "keywords": [
+    "local-storage",
+    "cookie"
+  ],
+  "author": "Paul Clarke <paul.clarke@holidayextras.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/holidayextras/remember-me/issues"
+  },
+  "homepage": "https://github.com/holidayextras/remember-me#readme",
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "istanbul": "^0.3.22",
+    "make-up": "^5.4.0",
+    "mocha": "^2.3.3",
+    "sinon": "^1.17.2"
+  },
+  "dependencies": {
+    "lodash.merge": "^3.3.2",
+    "tracker": "git@github.com:holidayextras/tracker.git"
+  }
+}
