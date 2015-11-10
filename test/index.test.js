@@ -1,10 +1,10 @@
 'use strict';
 var assert = require('chai').assert;
 var sinon = require('sinon');
-var tracker = require('tracker');
 var rememberMe = require('../src/');
 
 describe( 'rememberMe', function( ) {
+  var callback;
 
   beforeEach( function( ) {
     global.localStorage = {};
@@ -13,13 +13,12 @@ describe( 'rememberMe', function( ) {
     };
     sinon.stub( JSON, 'stringify' ).returns( 'json' );
     sinon.stub( JSON, 'parse' ).returns( { foo: 'bar' } );
-    sinon.stub( tracker, 'error' );
+    callback = sinon.spy( );
   } );
 
   afterEach( function( ) {
     JSON.stringify.restore( );
     JSON.parse.restore( );
-    tracker.error.restore( );
   } );
 
   describe( 'set', function( ) {
@@ -47,20 +46,44 @@ describe( 'rememberMe', function( ) {
       sinon.assert.calledWith( JSON.stringify, { url: 'foo' } );
     } );
 
-    it( 'catches and tracks errors from localStorage', function( ) {
-      global.localStorage = null;
-      rememberMe.set( );
-      sinon.assert.calledOnce( JSON.stringify );
-      sinon.assert.calledOnce( tracker.error );
-      sinon.assert.calledWith( tracker.error, "failed setting rememberMe; Cannot set property 'rememberMe' of null" );
+    describe( 'without an error handler', function( ) {
+      it( 'quietly ignores an error from localStorage', function( ) {
+        global.localStorage = null;
+        assert.doesNotThrow( function( ) {
+          rememberMe.set( );
+        } );
+      } );
+  
+      it( 'quietly ignores an error  from JSON', function( ) {
+        JSON.stringify.throws( new Error( 'oops' ));
+        assert.doesNotThrow( function( ) {
+          rememberMe.set( );
+        } );
+      } );
     } );
 
-    it( 'catches and tracks errors from JSON', function( ) {
-      JSON.stringify.throws( new Error( 'oops' ));
-      rememberMe.set( );
-      sinon.assert.calledOnce( JSON.stringify );
-      sinon.assert.calledOnce( tracker.error );
-      sinon.assert.calledWith( tracker.error, 'failed setting rememberMe; oops' );
+    describe( 'with an error handler', function( ) {
+      it( 'catches errors from localStorage', function( ) {
+        global.localStorage = null;
+        rememberMe.set( null, callback );
+        sinon.assert.calledOnce( JSON.stringify );
+        sinon.assert.calledOnce( callback );
+        sinon.assert.calledWith( callback, "failed setting rememberMe; Cannot set property 'rememberMe' of null" );
+      } );
+  
+      it( 'catches errors from JSON', function( ) {
+        JSON.stringify.throws( new Error( 'oops' ));
+        rememberMe.set( null, callback );
+        sinon.assert.calledOnce( JSON.stringify );
+        sinon.assert.calledOnce( callback );
+        sinon.assert.calledWith( callback, 'failed setting rememberMe; oops' );
+      } );
+    } );
+
+    it( 'catches a callback param in the wrong place', function( ) {
+      assert.throws( function( ) {
+        rememberMe.set( callback );
+      } );
     } );
 
   } );
@@ -73,19 +96,37 @@ describe( 'rememberMe', function( ) {
       sinon.assert.calledWith( JSON.parse, 'json.parse is stubbed' );
     } );
 
-    it( 'catches and tracks errors from localStorage', function( ) {
-      global.localStorage = null;
-      rememberMe.get( );
-      sinon.assert.calledOnce( tracker.error );
-      sinon.assert.calledWith( tracker.error, "failed getting rememberMe; Cannot read property 'rememberMe' of null" );
+    describe( 'without an error handler', function( ) {
+      it( 'ignores errors from localStorage', function( ) {
+        global.localStorage = null;
+        assert.doesNotThrow( function( ) {
+          rememberMe.get( callback );
+        } );
+      } );
+  
+      it( 'ignores errors from JSON', function( ) {
+        JSON.parse.throws( new Error( 'oops' ));
+        assert.doesNotThrow( function( ) {
+          rememberMe.get( );
+        } );
+      } );
     } );
 
-    it( 'catches and tracks errors from JSON', function( ) {
-      JSON.parse.throws( new Error( 'oops' ));
-      rememberMe.get( );
-      sinon.assert.calledOnce( JSON.parse );
-      sinon.assert.calledOnce( tracker.error );
-      sinon.assert.calledWith( tracker.error, 'failed getting rememberMe; oops' );
+    describe( 'with an error handler', function( ) {
+      it( 'catches errors from localStorage', function( ) {
+        global.localStorage = null;
+        rememberMe.get( callback );
+        sinon.assert.calledOnce( callback );
+        sinon.assert.calledWith( callback, "failed getting rememberMe; Cannot read property 'rememberMe' of null" );
+      } );
+  
+      it( 'catches errors from JSON', function( ) {
+        JSON.parse.throws( new Error( 'oops' ));
+        rememberMe.get( callback );
+        sinon.assert.calledOnce( JSON.parse );
+        sinon.assert.calledOnce( callback );
+        sinon.assert.calledWith( callback, 'failed getting rememberMe; oops' );
+      } );
     } );
 
   } );

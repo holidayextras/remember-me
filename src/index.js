@@ -1,28 +1,34 @@
 'use strict';
 var _ = { extend: require('lodash.merge') };
-var tracker = require('tracker');
 
 var rememberMe = module.exports = {
   key: 'rememberMe'
 };
 
-rememberMe.set = function( params ) {
+rememberMe.set = function( params, errorCallback ) {
   var defaults = {
     url: location.href
   };
+  if ( typeof params === 'function' ) {
+    throw new Error( 'usage: set( params, errorCallback )' );
+  }
   var data = _.extend( defaults, params );
   try {
     localStorage[rememberMe.key] = JSON.stringify( data );
   } catch( e ) {
-    tracker.error( 'failed setting ' + rememberMe.key + '; ' + e.message );
+    if ( errorCallback ) {
+      errorCallback( 'failed setting ' + rememberMe.key + '; ' + e.message );
+    }
   }
 };
 
-rememberMe.get = function( ) {
+rememberMe.get = function( errorCallback ) {
   try {
     return JSON.parse( localStorage[rememberMe.key] );
   } catch( e ) {
-    tracker.error( 'failed getting ' + rememberMe.key + '; ' + e.message );
+    if ( errorCallback ) {
+      errorCallback( 'failed getting ' + rememberMe.key + '; ' + e.message );
+    }
     return null;
   }
 };

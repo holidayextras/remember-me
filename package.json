@@ -31,7 +31,6 @@
     "sinon": "^1.17.2"
   },
   "dependencies": {
-    "lodash.merge": "^3.3.2",
-    "tracker": "git@github.com:holidayextras/tracker.git"
+    "lodash.merge": "^3.3.2"
   }
 }
