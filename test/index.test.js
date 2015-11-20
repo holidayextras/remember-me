@@ -53,7 +53,7 @@ describe( 'rememberMe', function( ) {
           rememberMe.set( );
         } );
       } );
-  
+
       it( 'quietly ignores an error  from JSON', function( ) {
         JSON.stringify.throws( new Error( 'oops' ));
         assert.doesNotThrow( function( ) {
@@ -70,7 +70,7 @@ describe( 'rememberMe', function( ) {
         sinon.assert.calledOnce( callback );
         sinon.assert.calledWith( callback, "failed setting rememberMe; Cannot set property 'rememberMe' of null" );
       } );
-  
+
       it( 'catches errors from JSON', function( ) {
         JSON.stringify.throws( new Error( 'oops' ));
         rememberMe.set( null, callback );
@@ -103,7 +103,7 @@ describe( 'rememberMe', function( ) {
           rememberMe.get( callback );
         } );
       } );
-  
+
       it( 'ignores errors from JSON', function( ) {
         JSON.parse.throws( new Error( 'oops' ));
         assert.doesNotThrow( function( ) {
@@ -119,7 +119,7 @@ describe( 'rememberMe', function( ) {
         sinon.assert.calledOnce( callback );
         sinon.assert.calledWith( callback, "failed getting rememberMe; Cannot read property 'rememberMe' of null" );
       } );
-  
+
       it( 'catches errors from JSON', function( ) {
         JSON.parse.throws( new Error( 'oops' ));
         rememberMe.get( callback );

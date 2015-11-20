@@ -36,7 +36,7 @@ var data = rememberMe.get( errorCallback ); // calls errorCallback on error
 ```
 
 ## Testing
-`npm tests`
+`npm test`
 
 ### coverage
 `npm run coverage`

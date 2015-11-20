@@ -6,7 +6,7 @@
   "scripts": {
     "ci": "npm run lint && npm run coverage",
     "coverage": "istanbul cover -x src/view/*.js _mocha --",
-    "lint": "make-up src && echo '🍻  All good!'",
+    "lint": "make-up src test && echo '🍻  All good!'",
     "test": "mocha"
   },
   "repository": {
