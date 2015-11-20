@@ -36,12 +36,20 @@ var data = rememberMe.get( errorCallback ); // calls errorCallback on error
 ```
 
 ## Testing
-`npm test`
+```
+npm test
+```
 
 ### coverage
-`npm run coverage`
-This repo uses Travis for CI and expects 100% tests coverage to pass. Current status [img]https://travis-ci.org/holidayextras/remember-me.svg?branch=1.0.0[/img]
+```
+npm run coverage
+```
+
+This repo uses Travis for CI and expects 100% tests coverage to pass. Current status ![Travis build status](https://travis-ci.org/holidayextras/remember-me.svg)
 
 ## linting
-`npm run lint`
+```
+npm run lint
+```
+
 This repo is linted with https://github.com/holidayextras/make-up
